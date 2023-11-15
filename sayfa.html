@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>CSS Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0px;
+      background-color: #E0F4FF;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Style the header */
+    header {
+      background-color: #39A7FF;
+      padding: 30px;
+      text-align: center;
+      font-size: 35px;
+      color: white;
+    }
+
+    /* Create two columns/boxes that float next to each other */
+    nav {
+      float: left;
+      width: 30%;
+      height: fit-content;
+      padding: 20px;
+      background-color: aliceblue;
+    }
+
+    /* Style the list inside the menu */
+    nav ul {
+      list-style-type: none;
+    }
+
+    .todolist {
+      float: left;
+      padding: 20px;
+      width: 70%;
+    }
+
+    #myInput {
+      width: 50%; /* Adjust the width as needed */
+      padding: 10px; /* Adjust the padding as needed */
+      box-sizing: border-box;
+      border-radius: 10px; /* Adjust the border-radius for softer corners */
+      border: 1px solid #050505;
+    }
+
+    .addBtn {
+      background-color: green;
+      padding: 1%;
+      color: white;
+      border-radius: 20%;
+    }
+    /* Style the individual list items */
+    .todolist li {
+      padding: 12px;
+      background-color: #FFEED9;
+      border-style: solid;
+      border-color: black;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      align-items: center; /* Align checkbox and text vertically */
+      justify-content: space-between; /* Space between checkbox and text */
+    }
+
+    .listelements {
+      margin-bottom: 0px;
+      padding: 15px;
+      font-size: large;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+      border: solid;
+      border-color: #FFEED9;
+      border-radius: 3%;
+    }
+
+    .a-tagi {
+      background-color: white;
+      margin-top: 0;
+      margin-bottom: 0;  
+    }
+
+    /* Style the checkbox */
+    .checkbox {
+      margin-right: 15px;
+    }
+
+    /* Style the delete button */
+    .deleteBtn {
+      background-color: #ff6666;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Clear floats after the columns */
+    section::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+    @media (max-width: 600px) {
+      nav,
+      article {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+  <script>
+    // Your JavaScript code for the body part
+    var myNodelist = document.getElementsByTagName("LI");
+    var i;
+  
+    for (i = 0; i < myNodelist.length; i++) {
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "checkbox";
+      myNodelist[i].appendChild(checkbox);
+  
+      // Create delete button for each list item
+      var deleteBtn = document.createElement("button");
+      deleteBtn.innerHTML = "Kaldır";
+      deleteBtn.className = "deleteBtn";
+      myNodelist[i].appendChild(deleteBtn);
+  
+      // Add event listener for delete button
+      deleteBtn.addEventListener("click", function () {
+        var div = this.parentElement;
+        div.style.display = "none";
+        removeFromLocalStorage(div.textContent);
+      });
+    }
+  
+    var list = document.querySelector('ul');
+  
+    list.addEventListener('click', function (ev) {
+      if (ev.target.tagName === 'LI') {
+        ev.target.classList.toggle('checked');
+      }
+    }, false);
+  
+    function newElement() {
+      var li = document.createElement("li");
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "checkbox";
+      li.appendChild(checkbox);
+  
+      var inputValue = document.getElementById("myInput").value;
+      var t = document.createTextNode(inputValue);
+      li.appendChild(t);
+      if (inputValue === '') {
+        alert("You must write something!");
+      } else {
+        document.getElementById("myUL").appendChild(li);
+        addToLocalStorage(inputValue);
+      }
+      document.getElementById("myInput").value = "";
+  
+      // Create delete button for the new list item
+      var deleteBtn = document.createElement("button");
+      deleteBtn.innerHTML = "Kaldır";
+      deleteBtn.className = "deleteBtn";
+      li.appendChild(deleteBtn);
+  
+      // Add event listener for delete button
+      deleteBtn.addEventListener("click", function () {
+        var div = this.parentElement;
+        div.style.display = "none";
+        removeFromLocalStorage(div.textContent);
+      });
+    }
+  
+    function addToLocalStorage(task) {
+      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.push(task);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+  
+    function removeFromLocalStorage(task) {
+      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks = tasks.filter(t => t !== task);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+  </script>
+    
+</head>
+
+<body>
+
+  <header>
+    <h2 style="background-color: #39A7FF;">To Do App</h2>
+  </header>
+
+  <section>
+    <nav style="padding: 0;" >
+      <ul style="padding: 0;">
+        <li class="listelements"><a class="a-tagi" href="#">Home</a></li>
+        <li class="listelements"><a class="a-tagi" href="#">Liste Oluştur</a></li>
+        <li class="listelements"><a class="a-tagi" href="#">Listelerim</a></li>
+        <li class="listelements"><a class="a-tagi" href="#">Kitaplar</a></li>
+      </ul>
+    </nav>
+
+    <div class="todolist">
+      <div id="myDIV" class="header">
+        <h2>Yapacaklarım</h2>
+        <input type="text" id="myInput" placeholder="Yapacak çok iş var. Haydi bir tane ekle!">
+        <span onclick="newElement()" class="addBtn">Ekle</span>
+
+        <ul id="myUL">
+        </ul>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>
