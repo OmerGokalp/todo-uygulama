@@ -119,69 +119,85 @@
       }
     }
   </style>
-  <script>
+  
+  <!-- Add this script tag after your existing script tag in the head section -->
+<script>
+  // Retrieve stored tasks from local storage
+  var storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // Your JavaScript code for the body part
-    var myNodelist = document.getElementsByTagName("LI");
-    var i;
+  // Function to save tasks to local storage
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(storedTasks));
+  }
 
-    for (i = 0; i < myNodelist.length; i++) {
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "checkbox";
-      myNodelist[i].appendChild(checkbox);
+  // Function to add a new task
+  function addTask(value) {
+    var li = document.createElement("li");
 
-      // Create delete button for each list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.innerHTML = "Kaldır";
-      deleteBtn.className = "deleteBtn";
-      myNodelist[i].appendChild(deleteBtn);
+    // Create checkbox
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "checkbox";
+    li.appendChild(checkbox);
 
-      // Add event listener for delete button
-      deleteBtn.addEventListener("click", function () {
-        var div = this.parentElement;
-        div.style.display = "none";
-      });
+    // Create text node
+    var t = document.createTextNode(value);
+    li.appendChild(t);
+
+    // Store the task value as a custom attribute
+    li.setAttribute("data-task", value);
+
+    // Create delete button
+    var deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = "Kaldır";
+    deleteBtn.className = "deleteBtn";
+    li.appendChild(deleteBtn);
+
+    // Append li to the ul element
+    document.getElementById("myUL").appendChild(li);
+
+    // Add event listener for delete button
+    deleteBtn.addEventListener("click", function () {
+      var taskValue = li.getAttribute("data-task");
+
+      // Remove the task from storedTasks
+      var taskIndex = storedTasks.findIndex((task) => task.value === taskValue);
+      storedTasks.splice(taskIndex, 1);
+
+      // Save updated tasks to local storage
+      saveTasks();
+
+      // Remove the list item
+      li.style.display = "none";
+    });
+  }
+
+  // Populate the list from local storage when the page loads
+  window.onload = function () {
+    for (var i = 0; i < storedTasks.length; i++) {
+      addTask(storedTasks[i].value);
     }
+  };
 
-    var list = document.querySelector('ul');
+  // Your existing JavaScript code...
 
-    list.addEventListener('click', function (ev) {
-      if (ev.target.tagName === 'LI') {
-        ev.target.classList.toggle('checked');
-      }
-    }, false);
+  function newElement() {
+    var inputValue = document.getElementById("myInput").value;
+    if (inputValue === "") {
+      alert("You must write something!");
+    } else {
+      // Save the new task to storedTasks
+      storedTasks.push({ value: inputValue });
 
-    function newElement() {
-      var li = document.createElement("li");
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "checkbox";
-      li.appendChild(checkbox);
+      // Save updated tasks to local storage
+      saveTasks();
 
-      var inputValue = document.getElementById("myInput").value;
-      var t = document.createTextNode(inputValue);
-      li.appendChild(t);
-      if (inputValue === '') {
-        alert("You must write something!");
-      } else {
-        document.getElementById("myUL").appendChild(li);
-      }
-      document.getElementById("myInput").value = "";
-
-      // Create delete button for the new list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.innerHTML = "Kaldır";
-      deleteBtn.className = "deleteBtn";
-      li.appendChild(deleteBtn);
-
-      // Add event listener for delete button
-      deleteBtn.addEventListener("click", function () {
-        var div = this.parentElement;
-        div.style.display = "none";
-      });
+      // Add the new task to the list
+      addTask(inputValue);
     }
-  </script>
+    document.getElementById("myInput").value = "";
+  }
+</script>
 </head>
 
 <body>

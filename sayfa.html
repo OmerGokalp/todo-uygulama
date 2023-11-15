@@ -104,6 +104,12 @@
       cursor: pointer;
     }
 
+    /* Add this rule to your existing styles */
+    .todolist li.checked {
+      background-color: lightgreen;
+    }
+
+
     /* Clear floats after the columns */
     section::after {
       content: "";
@@ -119,84 +125,94 @@
       }
     }
   </style>
-  <script>
-    // Your JavaScript code for the body part
-    var myNodelist = document.getElementsByTagName("LI");
-    var i;
-  
-    for (i = 0; i < myNodelist.length; i++) {
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "checkbox";
-      myNodelist[i].appendChild(checkbox);
-  
-      // Create delete button for each list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.innerHTML = "Kaldır";
-      deleteBtn.className = "deleteBtn";
-      myNodelist[i].appendChild(deleteBtn);
-  
-      // Add event listener for delete button
-      deleteBtn.addEventListener("click", function () {
-        var div = this.parentElement;
-        div.style.display = "none";
-        removeFromLocalStorage(div.textContent);
-      });
-    }
-  
-    var list = document.querySelector('ul');
-  
-    list.addEventListener('click', function (ev) {
-      if (ev.target.tagName === 'LI') {
-        ev.target.classList.toggle('checked');
-      }
-    }, false);
-  
-    function newElement() {
-      var li = document.createElement("li");
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "checkbox";
-      li.appendChild(checkbox);
-  
-      var inputValue = document.getElementById("myInput").value;
-      var t = document.createTextNode(inputValue);
-      li.appendChild(t);
-      if (inputValue === '') {
-        alert("You must write something!");
+  <!-- Add this script tag after your existing script tag in the head section -->
+<script>
+  // Retrieve stored tasks from local storage
+  var storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  // Function to save tasks to local storage
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(storedTasks));
+  }
+
+  // Function to add a new task
+  function addTask(value) {
+    var li = document.createElement("li");
+
+    // Create checkbox
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "checkbox";
+    li.appendChild(checkbox);
+
+    // Create text node
+    var t = document.createTextNode(value);
+    li.appendChild(t);
+
+    // Store the task value as a custom attribute
+    li.setAttribute("data-task", value);
+
+    // Create delete button
+    var deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = "Kaldır";
+    deleteBtn.className = "deleteBtn";
+    li.appendChild(deleteBtn);
+
+    // Append li to the ul element
+    document.getElementById("myUL").appendChild(li);
+
+    // Add event listener for delete button
+    deleteBtn.addEventListener("click", function () {
+      var taskValue = li.getAttribute("data-task");
+
+      // Remove the task from storedTasks
+      var taskIndex = storedTasks.findIndex((task) => task.value === taskValue);
+      storedTasks.splice(taskIndex, 1);
+
+      // Save updated tasks to local storage
+      saveTasks();
+
+      // Remove the list item
+      li.style.display = "none";
+    });
+
+    // Add event listener for checkbox
+    checkbox.addEventListener("change", function () {
+      if (this.checked) {
+        li.classList.add("checked");
       } else {
-        document.getElementById("myUL").appendChild(li);
-        addToLocalStorage(inputValue);
+        li.classList.remove("checked");
       }
-      document.getElementById("myInput").value = "";
-  
-      // Create delete button for the new list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.innerHTML = "Kaldır";
-      deleteBtn.className = "deleteBtn";
-      li.appendChild(deleteBtn);
-  
-      // Add event listener for delete button
-      deleteBtn.addEventListener("click", function () {
-        var div = this.parentElement;
-        div.style.display = "none";
-        removeFromLocalStorage(div.textContent);
-      });
+    });
+  }
+
+  // Populate the list from local storage when the page loads
+  window.onload = function () {
+    for (var i = 0; i < storedTasks.length; i++) {
+      addTask(storedTasks[i].value);
     }
-  
-    function addToLocalStorage(task) {
-      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      tasks.push(task);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
+  };
+
+  // Your existing JavaScript code...
+
+  function newElement() {
+    var inputValue = document.getElementById("myInput").value;
+    if (inputValue === "") {
+      alert("You must write something!");
+    } else {
+      // Save the new task to storedTasks
+      storedTasks.push({ value: inputValue });
+
+      // Save updated tasks to local storage
+      saveTasks();
+
+      // Add the new task to the list
+      addTask(inputValue);
     }
-  
-    function removeFromLocalStorage(task) {
-      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      tasks = tasks.filter(t => t !== task);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-  </script>
-    
+    document.getElementById("myInput").value = "";
+  }
+</script>
+
 </head>
 
 <body>
