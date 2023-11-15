@@ -9,7 +9,7 @@ Bu repo todo uygulamasını içermektedir. Henüz bitmiş bir proje değildir. B
 Öncelikle projeyi clonelayın.(Buraya sizin reponuzdan aldığınız link gelecek)
 
 ```bash
-git clone https://github.com/cengizcmataraci/kodluyoruzilkrepo.git
+git clone https://github.com/OmerGokalp/todo-uygulama.git
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ Projeyi cloneladıktan sonra Visual Studio Code programında açınız.
 
 Linux için:
 ```linux
-cd kodluyoruzilkrepo
+cd todo-uygulama
 code .
 ```
 
