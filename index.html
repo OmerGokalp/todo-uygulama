@@ -104,6 +104,12 @@
       cursor: pointer;
     }
 
+    /* Add this rule to your existing styles */
+    .todolist li.checked {
+      background-color: lightgreen;
+    }
+
+
     /* Clear floats after the columns */
     section::after {
       content: "";
@@ -119,7 +125,6 @@
       }
     }
   </style>
-  
   <!-- Add this script tag after your existing script tag in the head section -->
 <script>
   // Retrieve stored tasks from local storage
@@ -170,6 +175,15 @@
       // Remove the list item
       li.style.display = "none";
     });
+
+    // Add event listener for checkbox
+    checkbox.addEventListener("change", function () {
+      if (this.checked) {
+        li.classList.add("checked");
+      } else {
+        li.classList.remove("checked");
+      }
+    });
   }
 
   // Populate the list from local storage when the page loads
@@ -198,6 +212,7 @@
     document.getElementById("myInput").value = "";
   }
 </script>
+
 </head>
 
 <body>
