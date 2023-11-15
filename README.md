@@ -1,6 +1,6 @@
 # todo-uygulama reposu
 
-Bu repo todo uygulamasını içermektedir. Henüz bitmiş bir proje değildir. Bu proje HTML temelleri,CSS layoutları ve Javascript algoritmaları içermektedir. Eğitim amaaçlı oluşturulmuştur. Son haline geldiğinde site canlıya alınacaktır. Kodları indirerek inceleyebilir, kendinize göre uyarlayabilirsiniz.
+Bu repo todo uygulamasını içermektedir. Henüz bitmiş bir proje değildir. Bu proje HTML temelleri,CSS layoutları ve Javascript algoritmaları içermektedir. Eğitim amaçlı oluşturulmuştur. Son haline geldiğinde site canlıya alınacaktır. Kodları indirerek inceleyebilir, kendinize göre uyarlayabilirsiniz.
 
 ![github](uygulama.jpg)
 
